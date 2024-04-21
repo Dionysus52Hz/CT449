@@ -1,0 +1,22 @@
+.book-item-img {
+   position: relative;
+   background-color: rgb(var(--v-theme-primary));
+   border-radius: 8px;
+   overflow: hidden;
+}
+
+.book-item-details {
+   padding-left: 8px;
+   display: flex;
+   flex-direction: column;
+   flex-grow: 1;
+   justify-content: space-between;
+}
+
+.book-title {
+   width: 100%;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 2;
+   overflow: hidden;
+}

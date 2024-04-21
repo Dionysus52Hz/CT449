@@ -1,0 +1,27 @@
+.book-title,
+.book-author,
+.username,
+.email,
+.phone {
+   font-size: clamp(0.5rem, 0.3rem + 1vw, 0.8rem) !important;
+}
+.book-title {
+   width: 100%;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 3;
+   overflow: hidden;
+}
+
+.username {
+   font-weight: 700;
+}
+
+.book-author,
+.email {
+   width: 100%;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 1;
+   overflow: hidden;
+}
