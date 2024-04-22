@@ -156,7 +156,7 @@
                      }"
                   >
                      <v-img
-                        v-if="prop === 'thumbnail'"
+                        v-if="prop === 'thumbnail' || prop === 'avatar'"
                         cover
                         :max-width="100"
                         :src="item[prop]"

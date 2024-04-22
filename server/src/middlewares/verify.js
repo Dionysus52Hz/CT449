@@ -12,8 +12,9 @@ const verifyAccessToken = async (req, res, next) => {
                success: false,
                message: 'Invalid access token!',
             });
+         } else {
+            req.user = decode;
          }
-         req.user = decode;
          next();
       });
    } else {
@@ -25,7 +26,7 @@ const verifyAccessToken = async (req, res, next) => {
 };
 
 const isAdmin = async (req, res, next) => {
-   if (req.user.role !== 'admin' && req.user.role !== 'employee') {
+   if (req?.user.role !== 'admin' && req?.user.role !== 'employee') {
       return res.status(StatusCodes.FORBIDDEN).json({
          success: false,
          message: 'Permission denied',

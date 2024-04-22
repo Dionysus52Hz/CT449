@@ -99,24 +99,26 @@ const login = async (employeeId, pass) => {
    }
 };
 
-const createNewAccessToken = async (refreshToken) => {
-   try {
-      const verified = jwt.verify(refreshToken, env.JWT_SECRET_KEY);
+// const createNewAccessToken = async (refreshToken) => {
+//    try {
+//       const verified = jwt.verify(refreshToken, env.JWT_SECRET_KEY);
 
-      const result = await EmployeeModel.findOne({
-         _id: verified._id,
-         refreshToken: refreshToken,
-      });
+//       console.log(verified);
 
-      const newAccessToken = result
-         ? jwtMiddleware.generateAccessToken(result._id, result.role)
-         : 'Invalid refresh token';
+//       const result = await EmployeeModel.findOne({
+//          _id: verified._id,
+//          refreshToken: refreshToken,
+//       });
 
-      return newAccessToken;
-   } catch (error) {
-      throw new Error(error);
-   }
-};
+//       const newAccessToken = result
+//          ? jwtMiddleware.generateAccessToken(result._id, result.role)
+//          : 'Invalid refresh token';
+
+//       return newAccessToken;
+//    } catch (error) {
+//       throw new Error(error);
+//    }
+// };
 
 const logout = async (refreshToken) => {
    try {
@@ -140,5 +142,4 @@ export const EmployeeService = {
    deleteEmployee,
    login,
    logout,
-   createNewAccessToken,
 };

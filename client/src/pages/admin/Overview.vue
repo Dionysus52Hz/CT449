@@ -274,6 +274,29 @@
       }
    };
 
+   const logout = async () => {
+      try {
+         await EmployeeService.logout();
+         loginStore.setLoginState({
+            isLoggedIn: false,
+            owner: null,
+            role: null,
+         });
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
+   const goToLoginPage = () => {
+      try {
+         router.replace({
+            name: 'loginPage',
+         });
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
    const borrowings = ref(null);
    const getBorrowings = async () => {
       try {
@@ -290,6 +313,7 @@
    });
 
    onActivated(async () => {
+      console.log(123);
       await getBorrowings();
    });
 </script>

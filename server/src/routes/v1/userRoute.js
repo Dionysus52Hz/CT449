@@ -1,6 +1,7 @@
 import express from 'express';
 import { UserController } from '~/controllers/userController';
 import { verify } from '~/middlewares/verify';
+import uploadCloud from '~/config/cloudinary.config';
 
 const Router = express.Router();
 
@@ -11,8 +12,12 @@ Router.route('/current').get(
    UserController.getCurrent
 );
 
-Router.route('/create-new-access-token').post(
-   UserController.createNewAccessToken
+Router.route('/get-users-by-filter').get(UserController.getUsersByFilter);
+
+Router.route('/upload-user-avatar/:id').put(
+   verify.verifyAccessToken,
+   uploadCloud.single('avatar'),
+   UserController.uploadUserAvatar
 );
 
 Router.route('/logout').post(verify.verifyAccessToken, UserController.logout);

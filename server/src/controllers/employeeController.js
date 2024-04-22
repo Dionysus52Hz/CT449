@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { EmployeeService } from '~/services/employeeService';
+import { UserService } from '~/services/userService';
 import ApiError from '~/utils/ApiError';
 
 const createNew = async (req, res, next) => {
@@ -119,28 +120,30 @@ const getCurrent = async (req, res, next) => {
    }
 };
 
-const createNewAccessToken = async (req, res, next) => {
-   try {
-      const cookie = req.cookies;
-      const refreshToken = cookie.refreshToken;
-      if (!cookie || !refreshToken) {
-         res.status(StatusCodes.UNAUTHORIZED).json({
-            success: false,
-            message: 'No refresh token in cookies',
-         });
-      }
-      const newAccessToken = await EmployeeService.createNewAccessToken(
-         refreshToken
-      );
+// const createNewAccessToken = async (req, res, next) => {
+//    try {
+//       const cookie = req.cookies;
+//       const refreshToken = cookie.refreshToken;
+//       if (!cookie || !refreshToken) {
+//          res.status(StatusCodes.UNAUTHORIZED).json({
+//             success: false,
+//             message: 'No refresh token in cookies',
+//          });
+//       }
+//       let newAccessToken;
+//       newAccessToken = await EmployeeService.createNewAccessToken(refreshToken);
 
-      res.status(StatusCodes.OK).json({
-         success: true,
-         accessToken: newAccessToken,
-      });
-   } catch (error) {
-      return next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
-   }
-};
+//       if (!newAccessToken) {
+//          newAccessToken = await UserService.createNewAccessToken(refreshToken);
+//       }
+//       res.status(StatusCodes.OK).json({
+//          success: true,
+//          accessToken: newAccessToken,
+//       });
+//    } catch (error) {
+//       return next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
+//    }
+// };
 
 const logout = async (req, res, next) => {
    try {
@@ -172,5 +175,4 @@ export const EmployeeController = {
    login,
    logout,
    getCurrent,
-   createNewAccessToken,
 };

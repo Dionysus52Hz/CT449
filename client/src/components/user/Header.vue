@@ -93,6 +93,14 @@
                class="d-md-none"
                @click.stop="drawerIsOpen = !drawerIsOpen"
             ></v-app-bar-nav-icon>
+
+            <v-app-bar-nav-icon
+               v-if="loginState.isLoggedIn && currentUser"
+               class="d-none d-md-block"
+               variant="text"
+               :icon="mdiAccount"
+               @click.stop="showAccountInfo = !showAccountInfo"
+            ></v-app-bar-nav-icon>
          </template>
       </v-app-bar>
 
@@ -102,7 +110,7 @@
          location="right"
          temporary
       >
-         <v-card>
+         <template v-slot:prepend>
             <v-card-item class="pa-4">
                <v-row>
                   <v-col class="menu-logo">
@@ -119,9 +127,10 @@
                   </v-col>
                </v-row>
             </v-card-item>
-
             <v-divider></v-divider>
+         </template>
 
+         <v-card elevation="0">
             <v-list
                density="compact"
                mandatory
@@ -129,9 +138,10 @@
                <v-list-item
                   v-for="(page, index) in pages"
                   :key="index"
-                  :value="page"
+                  :value="page.value"
                   @click="page.direct"
                   color="primary"
+                  :active="currentPage === page.value ? true : false"
                >
                   <template v-slot:prepend>
                      <v-icon
@@ -142,12 +152,12 @@
 
                   <v-list-item-title
                      v-text="page.text"
-                     class="font-weight-bold"
+                     class="text-uppercase"
                   ></v-list-item-title>
                </v-list-item>
             </v-list>
 
-            <v-divider></v-divider>
+            <v-divider v-if="loginState.isLoggedIn"></v-divider>
 
             <v-list
                v-if="loginState.isLoggedIn && currentUser"
@@ -210,13 +220,33 @@
 
                   <v-list-item-title
                      class="subtitle"
-                     v-text="'Tài khoản của tôi'"
+                     v-text="'Sửa thông tin cá nhân'"
+                  ></v-list-item-title>
+               </v-list-item>
+
+               <v-list-item
+                  value="myAccount"
+                  color="primary"
+                  class="subtitle px-3"
+                  rounded="lg"
+               >
+                  <template v-slot:prepend>
+                     <v-icon
+                        :icon="mdiAccountCog"
+                        color="primary"
+                     ></v-icon>
+                  </template>
+
+                  <v-list-item-title
+                     class="subtitle"
+                     v-text="'Đổi mật khẩu'"
                   ></v-list-item-title>
                </v-list-item>
             </v-list>
+         </v-card>
 
-            <v-divider></v-divider>
-
+         <template v-slot:append>
+            <v-divider v-if="loginState.isLoggedIn"></v-divider>
             <v-card-actions class="flex-column align-center pa-4">
                <v-btn
                   v-if="!loginState.isLoggedIn"
@@ -247,11 +277,152 @@
                   variant="flat"
                   color="primary"
                   :append-icon="mdiChevronRight"
-                  @click="logout"
+                  @click="confirmLogoutDialog = true"
                   >Đăng xuất</v-btn
                >
             </v-card-actions>
+         </template>
+      </v-navigation-drawer>
+
+      <v-navigation-drawer
+         class="show-account-info"
+         v-model="showAccountInfo"
+         location="right"
+         temporary
+         :width="'auto'"
+      >
+         <template v-slot:prepend>
+            <div class="pa-4 d-flex">
+               <p class="title text-uppercase">Tài khoản của tôi</p>
+               <v-spacer></v-spacer>
+               <v-icon
+                  :icon="mdiClose"
+                  @click.stop="showAccountInfo = !showAccountInfo"
+               ></v-icon>
+            </div>
+            <v-divider></v-divider>
+         </template>
+
+         <v-card elevation="0">
+            <v-list
+               v-if="loginState.isLoggedIn && currentUser"
+               density="compact"
+               class="pa-4"
+            >
+               <v-list-item
+                  class="pa-0 pb-4"
+                  :prepend-avatar="
+                     currentUser?.avatar
+                        ? currentUser?.avatar
+                        : 'https://cdn.vuetifyjs.com/images/john.png'
+                  "
+               >
+                  <v-list-item-title class="subtitle">{{
+                     currentUser?.lastName
+                  }}</v-list-item-title>
+
+                  <v-list-item-subtitle class="subtitle">{{
+                     currentUser?.email
+                  }}</v-list-item-subtitle>
+               </v-list-item>
+
+               <v-list-item
+                  value="borrowingHistory"
+                  color="primary"
+                  class="subtitle px-3"
+                  rounded="lg"
+               >
+                  <template v-slot:prepend>
+                     <v-icon
+                        :icon="mdiBookClock"
+                        color="primary"
+                     ></v-icon>
+                  </template>
+
+                  <v-list-item-title
+                     class="subtitle"
+                     v-text="'Lịch sử mượn sách'"
+                     @click="goToMyLibraryPage"
+                  ></v-list-item-title>
+               </v-list-item>
+
+               <v-list-item
+                  value="myAccount"
+                  color="primary"
+                  class="subtitle px-3"
+                  rounded="lg"
+               >
+                  <template v-slot:prepend>
+                     <v-icon
+                        :icon="mdiAccountCog"
+                        color="primary"
+                     ></v-icon>
+                  </template>
+
+                  <v-list-item-title
+                     class="subtitle"
+                     v-text="'Sửa thông tin cá nhân'"
+                  ></v-list-item-title>
+               </v-list-item>
+
+               <v-list-item
+                  value="changePassword"
+                  color="primary"
+                  class="subtitle px-3"
+                  rounded="lg"
+               >
+                  <template v-slot:prepend>
+                     <v-icon
+                        :icon="mdiAccountCog"
+                        color="primary"
+                     ></v-icon>
+                  </template>
+
+                  <v-list-item-title
+                     class="subtitle"
+                     v-text="'Đổi mật khẩu'"
+                  ></v-list-item-title>
+               </v-list-item>
+            </v-list>
          </v-card>
+
+         <template v-slot:append>
+            <v-divider v-if="loginState.isLoggedIn"></v-divider>
+            <v-card-actions class="flex-column align-center pa-4">
+               <v-btn
+                  v-if="!loginState.isLoggedIn"
+                  @click="goToSignUpPage"
+                  rounded="lg"
+                  variant="tonal"
+                  block
+                  color="primary"
+                  :append-icon="mdiChevronRight"
+                  >Đăng ký</v-btn
+               >
+
+               <v-btn
+                  v-if="!loginState.isLoggedIn"
+                  @click="goToLoginPage"
+                  rounded="lg"
+                  variant="flat"
+                  block
+                  color="primary"
+                  :append-icon="mdiChevronRight"
+                  class="ma-0 mt-4"
+                  >Đăng nhập</v-btn
+               >
+
+               <v-btn
+                  v-if="loginState.isLoggedIn"
+                  block
+                  variant="flat"
+                  color="primary"
+                  :append-icon="mdiChevronRight"
+                  @click="confirmLogoutDialog = true"
+                  >Đăng xuất</v-btn
+               >
+            </v-card-actions>
+         </template>
       </v-navigation-drawer>
 
       <v-dialog
@@ -292,6 +463,45 @@
             </v-card-actions>
          </v-card>
       </v-dialog>
+
+      <v-dialog
+         v-model="confirmLogoutDialog"
+         max-width="600"
+         persistent
+         scrollable
+      >
+         <v-card>
+            <v-card-item class="px-4 py-2">
+               <v-card-title class="subheading font-weight-bold"
+                  >THÔNG BÁO</v-card-title
+               >
+            </v-card-item>
+            <v-divider></v-divider>
+
+            <v-card-text>
+               <p class="text-center">Bạn muốn đăng xuất tài khoản này?</p>
+            </v-card-text>
+
+            <v-card-actions class="pa-4 pt-2">
+               <v-spacer></v-spacer>
+
+               <v-btn
+                  variant="tonal"
+                  @click="confirmLogoutDialog = false"
+                  class="me-2"
+                  >Huỷ</v-btn
+               >
+               <v-btn
+                  color="error"
+                  variant="flat"
+                  @click="
+                     (confirmLogoutDialog = false), logout(), goToHomePage()
+                  "
+                  >Đăng xuất</v-btn
+               >
+            </v-card-actions>
+         </v-card>
+      </v-dialog>
    </div>
 </template>
 
@@ -306,6 +516,7 @@
       mdiMagnify,
       mdiBookClock,
       mdiAccountCog,
+      mdiAccount,
    } from '@mdi/js';
    import SearchBar from '~/components/user/SearchBar.vue';
    import { SEARCH_FILTERS_FOR_USER } from '~/utils/constants';
@@ -322,6 +533,7 @@
    import { setAccessToken } from '~/utils/accessToken';
 
    const drawerIsOpen = ref(false);
+   const showAccountInfo = ref(false);
    const tab = ref(null);
    const { mdAndUp, smAndUp, mdAndDown, smAndDown } = useDisplay();
    const router = useRouter();
@@ -329,6 +541,7 @@
    const pages = [
       {
          text: 'Trang chủ',
+         value: 'home',
          icon: mdiHome,
          direct: () => {
             router.push({ name: 'userHomePage' });
@@ -342,6 +555,7 @@
       },
       {
          text: 'Sách',
+         value: 'categories',
          icon: mdiBookMultiple,
          direct: () => {
             router.push({
@@ -357,12 +571,16 @@
 
       {
          text: 'Tác giả',
+         value: 'authors',
          icon: mdiBookshelf,
          direct: () => {
             router.push({ name: 'myLibraryPage' });
          },
       },
    ];
+   const goToHomePage = () => {
+      router.push({ name: 'userHomePage' });
+   };
 
    const goToSignUpPage = () => {
       router.push({ name: 'signUpPage' });
@@ -418,6 +636,7 @@
       }
    };
 
+   const confirmLogoutDialog = ref(false);
    const logout = async () => {
       try {
          await UserService.logout();

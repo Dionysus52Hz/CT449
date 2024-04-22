@@ -5,6 +5,7 @@ export const SEARCH_FILTERS_FOR_USER = [
       filter: 'keyword',
       text: 'Từ khoá bất kỳ',
    },
+
    {
       filter: 'title',
       text: 'Tựa đề',
@@ -16,6 +17,60 @@ export const SEARCH_FILTERS_FOR_USER = [
    {
       filter: 'publishedYear',
       text: 'Năm xuất bản',
+   },
+];
+
+export const BOOK_SEARCH_FILTERS_FOR_ADMIN = [
+   {
+      filter: 'keyword',
+      text: 'Từ khoá bất kỳ',
+   },
+   {
+      filter: 'bookId',
+      text: 'Mã sách',
+   },
+   {
+      filter: 'title',
+      text: 'Tựa đề',
+   },
+   {
+      filter: 'description',
+      text: 'Mô tả',
+   },
+   {
+      filter: 'author',
+      text: 'Tác giả',
+   },
+   {
+      filter: 'publishedYear',
+      text: 'Năm xuất bản',
+   },
+];
+
+export const USER_SEARCH_FILTERS_FOR_ADMIN = [
+   {
+      filter: 'keyword',
+      text: 'Từ khoá bất kỳ',
+   },
+   {
+      text: 'Tên đăng nhập',
+      filter: 'userId',
+   },
+   {
+      text: 'Email',
+      filter: 'email',
+   },
+   {
+      text: 'Họ và tên đệm',
+      filter: 'lastName',
+   },
+   {
+      text: 'Tên',
+      filter: 'firstName',
+   },
+   {
+      text: 'Số điện thoại',
+      filter: 'phone',
    },
 ];
 
@@ -65,7 +120,7 @@ export const PUBLISHERS = [
 ];
 
 export const BOOK_TABLE_HEADERS = {
-   _id: 'Mã sách',
+   bookId: 'Mã sách',
    thumbnail: 'Ảnh bìa',
    title: 'Tựa đề',
    description: 'Mô tả',
@@ -111,14 +166,6 @@ export const BOOK_SORT_BY = [
    {
       text: 'Tác giả',
       value: 'author',
-   },
-   {
-      text: 'Thời gian tạo',
-      value: 'createdAt',
-   },
-   {
-      text: 'Thời gian chỉnh sửa',
-      value: 'updatedAt',
    },
 ];
 
@@ -175,13 +222,5 @@ export const USER_SORT_BY = [
    {
       text: 'Số điện thoại',
       value: 'phone',
-   },
-   {
-      text: 'Thời gian tạo',
-      value: 'createdAt',
-   },
-   {
-      text: 'Thời gian chỉnh sửa',
-      value: 'updatedAt',
    },
 ];

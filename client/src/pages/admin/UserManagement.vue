@@ -1,12 +1,51 @@
 <template>
-   <v-app-bar style="position: fixed">
+   <v-app-bar
+      elevation="0"
+      style="position: fixed"
+   >
       <v-spacer></v-spacer>
-      <v-btn @click="refreshUser">Làm mới</v-btn>
+      <v-btn
+         @click="refreshUser"
+         size="small"
+         >Làm mới dữ liệu</v-btn
+      >
 
-      <v-btn @click="addFormDialog = true">Thêm độc giả mới</v-btn>
-      <v-btn>Xoá tất cả</v-btn>
+      <v-btn
+         size="small"
+         @click="addFormDialog = true"
+         >Thêm độc giả mới</v-btn
+      >
+
       <v-spacer></v-spacer>
    </v-app-bar>
+
+   <v-app-bar
+      elevation="0"
+      :height="84"
+      style="position: fixed"
+      class="bg-surface-light"
+   >
+      <div class="pa-4 w-100">
+         <search-bar
+            :filters="USER_SEARCH_FILTERS_FOR_ADMIN"
+            @submit-search="submitSearch"
+         ></search-bar>
+      </div>
+   </v-app-bar>
+
+   <div
+      class="loading-circular"
+      v-if="!users"
+   >
+      <v-progress-circular
+         :size="70"
+         :width="7"
+         color="primary"
+         indeterminate
+         v-if="!users"
+      ></v-progress-circular>
+   </div>
+
    <data-table
       :items="users"
       :itemProperties="
@@ -19,7 +58,12 @@
       @item-active="setActiveUser"
       v-if="usersCount > 0"
    ></data-table>
-   <p v-else>Không tìm thấy dữ liệu người dùng.</p>
+   <p
+      class="text-center subheading py-4"
+      v-else
+   >
+      Không tìm thấy dữ liệu người dùng.
+   </p>
 
    <div class="text-center pa-4">
       <v-dialog
@@ -149,14 +193,17 @@
    import UserForm from '~/components/admin/UserForm.vue';
    import {
       USER_TABLE_HEADERS,
+      USER_SEARCH_FILTERS_FOR_ADMIN,
       USER_SORT_BY,
       SORT_TYPE,
    } from '~/utils/constants';
    import { convertTimestamp } from '~/utils/algorithms';
    import { onMounted, ref } from 'vue';
    import { useRouter } from 'vue-router';
-   import { useLoginStore } from '~/stores';
+   import { useLoginStore, useSearchFilterForUserStore } from '~/stores';
    import { mdiClose } from '@mdi/js';
+   import EmployeeService from '~/services/EmployeeService';
+   import SearchBar from '~/components/user/SearchBar.vue';
 
    const users = ref(null);
    const usersCount = ref(0);
@@ -224,7 +271,7 @@
 
    const logout = async () => {
       try {
-         await UserService.logout();
+         await EmployeeService.logout();
          loginStore.setLoginState({
             isLoggedIn: false,
             owner: null,
@@ -252,12 +299,22 @@
 
    const addUser = async (data) => {
       try {
-         await UserService.create(data);
+         const { avatar, ...userData } = data;
+         const idOfCreatedUser = (await UserService.create(userData))
+            .createdUser._id;
+
+         let formData = new FormData();
+         if (avatar) {
+            console.log(avatar);
+            formData.append('avatar', avatar[0]);
+            await UserService.uploadUserAvatar(idOfCreatedUser, formData);
+         }
          addFormDialog.value = false;
          await refreshUser();
          snackbarColor.value = true;
          snackbarContent.value = 'Thêm thành công';
          snackbar.value = true;
+         await refreshUser();
       } catch (error) {
          snackbarColor.value = false;
          snackbarContent.value = 'Người dùng đã tồn tại';
@@ -269,13 +326,20 @@
 
    const updateUser = async (data) => {
       try {
+         const { avatar, ...userData } = data;
+         let formData = new FormData();
+         if (avatar) {
+            formData.append('avatar', avatar[0]);
+            await UserService.uploadUserAvatar(data._id, formData);
+         }
          updateFormDialog.value = false;
-         await UserService.updateUser(data._id, data);
+         await UserService.updateUser(data._id, userData);
          snackbarContent.value = 'Cập nhật thành công';
          snackbarColor.value = true;
          snackbar.value = true;
          await refreshUser();
       } catch (error) {
+         console.log(error);
          snackbarContent.value = 'Có lỗi xảy ra, cập nhật không thành công';
          snackbarColor.value = false;
          snackbar.value = true;
@@ -283,9 +347,25 @@
       }
    };
 
+   const submitSearch = async () => {
+      const { searchFilter } = useSearchFilterForUserStore();
+      console.log(searchFilter);
+
+      const result = (await UserService.getUsersByFilter(searchFilter)).result;
+      console.log(result);
+      users.value = result;
+      usersCount.value = result?.length;
+      await convertUserTimestamp();
+   };
+
    const refreshUser = async () => {
       await getUsers();
       await convertUserTimestamp();
+      const { setSearchFilter } = useSearchFilterForUserStore();
+      setSearchFilter({
+         searchText: '',
+         filterSelected: USER_SEARCH_FILTERS_FOR_ADMIN[0],
+      });
    };
 
    onMounted(async () => {
@@ -293,4 +373,6 @@
    });
 </script>
 
-<style scoped></style>
+<style scoped>
+   @import url('~/assets/css/UserManagement.css');
+</style>

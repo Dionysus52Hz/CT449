@@ -187,8 +187,9 @@
       console.log('leave from user home');
    });
 
-   onActivated(() => {
+   onActivated(async () => {
       currentPageStore.setCurrentPage('home');
+      await getNewestBooks();
    });
 </script>
 <style scoped>

@@ -42,7 +42,7 @@
                            : '/src/assets/images/bookAlterThumbnail.png'
                      "
                      contain
-                     :aspect-ratio="0.65"
+                     :aspect-ratio="0.75"
                      color="surface-variant"
                      rounded
                   ></v-img>

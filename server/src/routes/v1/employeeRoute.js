@@ -11,9 +11,9 @@ Router.route('/current').get(
    EmployeeController.getCurrent
 );
 
-Router.route('/create-new-access-token').post(
-   EmployeeController.createNewAccessToken
-);
+// Router.route('/create-new-access-token').post(
+//    EmployeeController.createNewAccessToken
+// );
 
 Router.route('/logout').post(
    verify.verifyAccessToken,

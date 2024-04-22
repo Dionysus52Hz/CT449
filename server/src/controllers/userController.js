@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
+import { EmployeeService } from '~/services/employeeService';
 import { UserService } from '~/services/userService';
 import ApiError from '~/utils/ApiError';
 
@@ -115,28 +116,33 @@ const getCurrent = async (req, res, next) => {
    }
 };
 
-const createNewAccessToken = async (req, res, next) => {
-   try {
-      const cookie = req.cookies;
-      const refreshToken = cookie.refreshToken;
-      if (!cookie || !refreshToken) {
-         res.status(StatusCodes.UNAUTHORIZED).json({
-            success: false,
-            message: 'No refresh token in cookies',
-         });
-      }
-      const newAccessToken = await UserService.createNewAccessToken(
-         refreshToken
-      );
+// const createNewAccessToken = async (req, res, next) => {
+//    try {
+//       const cookie = req.cookies;
+//       const refreshToken = cookie.refreshToken;
+//       if (!cookie || !refreshToken) {
+//          res.status(StatusCodes.UNAUTHORIZED).json({
+//             success: false,
+//             message: 'No refresh token in cookies',
+//          });
+//       }
+//       let newAccessToken;
+//       newAccessToken = await UserService.createNewAccessToken(refreshToken);
 
-      res.status(StatusCodes.OK).json({
-         success: true,
-         accessToken: newAccessToken,
-      });
-   } catch (error) {
-      return next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
-   }
-};
+//       if (!newAccessToken) {
+//          newAccessToken = await EmployeeService.createNewAccessToken(
+//             refreshToken
+//          );
+//       }
+
+//       res.status(StatusCodes.OK).json({
+//          success: true,
+//          accessToken: newAccessToken,
+//       });
+//    } catch (error) {
+//       return next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
+//    }
+// };
 
 const logout = async (req, res, next) => {
    try {
@@ -159,6 +165,51 @@ const logout = async (req, res, next) => {
    }
 };
 
+const uploadUserAvatar = async (req, res, next) => {
+   try {
+      console.log(req.file);
+      if (!req.file) {
+         res.status(StatusCodes.BAD_REQUEST).json({
+            success: false,
+            message: 'Missing images',
+         });
+      } else {
+         console.log(req.file);
+         const result = await UserService.uploadUserAvatar(
+            req.params.id,
+            req.file
+         );
+         res.status(StatusCodes.OK).json({
+            success: true,
+            result,
+         });
+      }
+   } catch (error) {
+      console.log(error);
+      return next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
+   }
+};
+
+const getUsersByFilter = async (req, res, next) => {
+   try {
+      const filter = req.query.filter;
+      const result = await UserService.getUsersByFilter(filter);
+      if (result) {
+         res.status(StatusCodes.OK).json({
+            success: true,
+            result,
+         });
+      } else
+         res.status(StatusCodes.NOT_FOUND).json({
+            success: false,
+            message: 'Books not found',
+         });
+   } catch (error) {
+      console.log(error);
+      return next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
+   }
+};
+
 export const UserController = {
    createNew,
    getUsers,
@@ -168,5 +219,6 @@ export const UserController = {
    login,
    logout,
    getCurrent,
-   createNewAccessToken,
+   uploadUserAvatar,
+   getUsersByFilter,
 };

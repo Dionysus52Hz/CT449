@@ -1,5 +1,6 @@
 import createApiClient from './ApiService';
-import UserService from './UserService';
+import EmployeeService from './EmployeeService';
+import TokenService from './TokenService';
 import { getAccessToken, setAccessToken } from '~/utils/accessToken';
 
 class BorrowingService {
@@ -41,7 +42,7 @@ class BorrowingService {
                errorResponse.data.message === 'Invalid access token!' &&
                errorResponse.status === 401
             ) {
-               const newAccessToken = (await UserService.getNewAccessToken())
+               const newAccessToken = (await TokenService.getNewAccessToken())
                   .accessToken;
                await setAccessToken(newAccessToken);
 

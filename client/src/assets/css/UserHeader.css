@@ -3,13 +3,14 @@
    align-items: center;
 }
 
-.v-navigation-drawer--mobile {
+.v-navigation-drawer--mobile,
+.show-account-info {
    position: fixed !important;
    top: 16px !important;
    right: 16px !important;
    z-index: 1002 !important;
-   height: fit-content !important;
    border-radius: 8px;
+   overflow: hidden;
 }
 
 .v-list {

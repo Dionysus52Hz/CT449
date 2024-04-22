@@ -269,11 +269,11 @@
             await BorrowingService.create(requestData);
             snackbar.value = true;
             requestSuccess.value = true;
-            snackbarContent.value = 'Đăng ký mượn tài liệu thành công';
+            snackbarContent.value = 'Đăng ký mượn sách thành công';
          } else {
             requestSuccess.value = false;
             snackbarContent.value =
-               'Yêu cầu đăng ký mượn tài liệu này đang được chờ duyệt';
+               'Yêu cầu đăng ký mượn cho sách này đang được chờ duyệt';
             snackbar.value = true;
          }
       } catch (error) {
@@ -303,7 +303,7 @@
       } catch (error) {
          const errorResponse = error.response;
          if (
-            errorResponse.data?.message === 'Error: This book is already liked'
+            errorResponse?.data?.message === 'Error: This book is already liked'
          ) {
             requestSuccess.value = false;
             snackbarContent.value =

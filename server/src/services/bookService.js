@@ -92,6 +92,10 @@ const likeBook = async (id, userId) => {
          { $push: { likes: userId } },
          { returnDocument: 'after' }
       );
+
+      await UserModel.findByIdAndUpdate(userId, {
+         $push: { favoriteBook: id },
+      });
       return result;
    } catch (error) {
       throw new Error(error);
@@ -110,6 +114,10 @@ const unlikeBook = async (id, userId) => {
          { $pull: { likes: userId } },
          { returnDocument: 'after' }
       );
+
+      await UserModel.findByIdAndUpdate(userId, {
+         $pull: { favoriteBook: id },
+      });
       return result;
    } catch (error) {
       throw new Error(error);
@@ -124,14 +132,22 @@ const getBooksByFilter = async (filter) => {
       if (searchKey === 'keyword') {
          query = {
             $or: [
+               { bookId: { $regex: new RegExp(searchText, 'i') } },
                { title: { $regex: new RegExp(searchText, 'i') } },
                { author: { $regex: new RegExp(searchText, 'i') } },
+               { description: { $regex: new RegExp(searchText, 'i') } },
                {
                   publishedYear: isNaN(parseInt(searchText))
                      ? -1
                      : parseInt(searchText),
                },
             ],
+         };
+      } else if (searchKey === 'publishedYear') {
+         query = {
+            publishedYear: isNaN(parseInt(searchText))
+               ? -1
+               : parseInt(searchText),
          };
       } else {
          query = {

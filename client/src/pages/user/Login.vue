@@ -316,7 +316,7 @@
          loginStore.setLoginState(state);
 
          router.replace({
-            name: 'adminHomePage',
+            name: 'adminOverviewPage',
          });
       } catch (error) {
          console.log(error);

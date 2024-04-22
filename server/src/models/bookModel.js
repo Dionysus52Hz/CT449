@@ -3,6 +3,12 @@ import { CURRENT_YEAR } from '~/utils/constants';
 
 const bookSchema = new Schema(
    {
+      bookId: {
+         type: String,
+         default: function () {
+            return this._id.toString();
+         },
+      },
       title: {
          type: String,
          required: [true, 'Title is not allow to be empty'],

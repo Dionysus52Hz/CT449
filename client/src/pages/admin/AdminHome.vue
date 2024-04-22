@@ -100,10 +100,7 @@
                block
                color="primary"
                flat
-               @click="logout"
-               :to="{
-                  name: 'userHomePage',
-               }"
+               @click="confirmLogoutDialog = true"
                >Đăng xuất</v-btn
             >
          </v-sheet>
@@ -113,6 +110,43 @@
          <router-view></router-view>
       </v-main>
    </v-layout>
+
+   <v-dialog
+      v-model="confirmLogoutDialog"
+      max-width="600"
+      persistent
+      scrollable
+   >
+      <v-card>
+         <v-card-item class="px-4 py-2">
+            <v-card-title class="subheading font-weight-bold"
+               >THÔNG BÁO</v-card-title
+            >
+         </v-card-item>
+         <v-divider></v-divider>
+
+         <v-card-text>
+            <p class="text-center">Bạn muốn đăng xuất tài khoản này?</p>
+         </v-card-text>
+
+         <v-card-actions class="pa-4 pt-2">
+            <v-spacer></v-spacer>
+
+            <v-btn
+               variant="tonal"
+               @click="confirmLogoutDialog = false"
+               class="me-2"
+               >Huỷ</v-btn
+            >
+            <v-btn
+               color="error"
+               variant="flat"
+               @click="(confirmLogoutDialog = false), logout(), goToHomePage()"
+               >Đăng xuất</v-btn
+            >
+         </v-card-actions>
+      </v-card>
+   </v-dialog>
 </template>
 
 <script setup>
@@ -130,12 +164,15 @@
    import EmployeeService from '~/services/EmployeeService';
    import { useLoginStore } from '~/stores';
    import { setAccessToken } from '~/utils/accessToken';
-   import AdminOverview from '~/pages/admin/Overview.vue';
 
    const { mobile } = useDisplay();
    const drawerIsOpen = ref(!mobile.value);
+   const confirmLogoutDialog = ref(false);
 
    const router = useRouter();
+   const goToHomePage = () => {
+      router.push({ name: 'userHomePage' });
+   };
 
    const items = [
       {
@@ -153,19 +190,20 @@
          },
       },
       {
-         text: 'Quản lí mượn tài liệu',
-         icon: mdiBookshelf,
-         direct: () => {
-            router.push({ name: 'adminBorrowingManagementPage' });
-         },
-      },
-      {
          text: 'Quản lí độc giả',
          icon: mdiAccount,
          direct: () => {
             router.push({ name: 'adminUserManagementPage' });
          },
       },
+      {
+         text: 'Quản lí mượn sách',
+         icon: mdiBookshelf,
+         direct: () => {
+            router.push({ name: 'adminBorrowingManagementPage' });
+         },
+      },
+
       {
          text: 'Quản lí nhân viên',
          icon: mdiAccount,

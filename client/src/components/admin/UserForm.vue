@@ -61,18 +61,21 @@
    const [email, emailProps] = defineField('email', vuetifyConfig);
    const [lastName, lastNameProps] = defineField('lastName', vuetifyConfig);
    const [firstName, firstNameProps] = defineField('firstName', vuetifyConfig);
+   const [avatar, avatarProps] = defineField('avatar', vuetifyConfig);
    const [birthday, birthdayProps] = defineField('birthday', vuetifyConfig);
    const [address, addressProps] = defineField('address', vuetifyConfig);
    const [gender, genderProps] = defineField('gender', vuetifyConfig);
    const [phone, phoneProps] = defineField('phone', vuetifyConfig);
 
    const onSubmit = handleSubmit((values) => {
+      let updateUser;
       if (!props.user?.password) {
          values.password = '123456';
       }
       console.log(values);
       values.gender = values?.gender?.value;
-      const updateUser = { ...props.user, ...values };
+      const { avatar, ...userData } = props.user;
+      updateUser = { ...userData, ...values };
       console.log(values);
       emit('submitUser', updateUser);
    });
@@ -82,6 +85,8 @@
 
 <template>
    <v-form
+      method="post"
+      enctype="multipart/form-data"
       @submit="onSubmit"
       @keyup.enter="onSubmit"
       class="px-4"
@@ -116,6 +121,26 @@
          label="Tên"
          type="text"
       />
+
+      <p class="title">Ảnh đại diện</p>
+      <v-file-input
+         accept="image/png, image/jpg, image/jpeg"
+         v-model="avatar"
+         v-bind="avatarProps"
+         :prepend-icon="null"
+         clearable
+         variant="outlined"
+         bg-color="surface-light"
+         type="file"
+      >
+         <template v-slot:prepend-inner>
+            <v-btn
+               color="primary"
+               variant="tonal"
+               >Chọn file</v-btn
+            >
+         </template>
+      </v-file-input>
 
       <v-text-field
          counter

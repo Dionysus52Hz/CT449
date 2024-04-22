@@ -61,7 +61,7 @@
                            v-if="item.state === 'pending'"
                            color="primary"
                            :prepend-icon="mdiClockOutline"
-                           variant="outlined"
+                           variant="tonal"
                            :ripple="false"
                            size="small"
                            >Chờ duyệt</v-btn
@@ -71,7 +71,7 @@
                            v-if="item.state === 'approved'"
                            color="success"
                            :prepend-icon="mdiCheck"
-                           variant="outlined"
+                           variant="tonal"
                            :ripple="false"
                            size="small"
                            >Đã duyệt</v-btn
@@ -81,7 +81,7 @@
                            v-if="item.state === 'returned'"
                            color="success"
                            :prepend-icon="mdiCheck"
-                           variant="outlined"
+                           variant="tonal"
                            :ripple="false"
                            size="small"
                            >Đã trả sách</v-btn
@@ -94,7 +94,7 @@
                               class="py-2 py-md-3 border-dashed border-0 border-b pe-sm-2"
                               cols="12"
                               sm="6"
-                              md="4"
+                              md="5"
                            >
                               <div class="d-flex align-start ga-3">
                                  <v-img
@@ -129,7 +129,7 @@
                            <v-col
                               cols="12"
                               sm="6"
-                              md="4"
+                              md="5"
                               class="py-2 border-dashed border-0 border-b ps-sm-2"
                            >
                               <div
@@ -262,6 +262,7 @@
    } from '@mdi/js';
    import { useDisplay } from 'vuetify/lib/framework.mjs';
    import { convertTimestamp } from '~/utils/algorithms';
+   import { useRouter } from 'vue-router';
 
    const requireLoginDialog = ref(false);
    const checkRequiredLogin = (error) => {
@@ -271,6 +272,30 @@
          errorResponse.statusCode === 400
       ) {
          requireLoginDialog.value = true;
+      }
+   };
+
+   const logout = async () => {
+      try {
+         await EmployeeService.logout();
+         loginStore.setLoginState({
+            isLoggedIn: false,
+            owner: null,
+            role: null,
+         });
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
+   const router = useRouter();
+   const goToLoginPage = () => {
+      try {
+         router.replace({
+            name: 'loginPage',
+         });
+      } catch (error) {
+         console.log(error);
       }
    };
 

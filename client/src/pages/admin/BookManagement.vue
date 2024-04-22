@@ -1,20 +1,38 @@
 <template>
-   <v-app-bar style="position: fixed">
+   <v-app-bar
+      elevation="0"
+      style="position: fixed"
+   >
       <v-spacer></v-spacer>
       <v-btn
          class="px-2 px-sm-4"
          @click="refreshBook"
-         >Làm mới</v-btn
+         size="small"
+         >Làm mới dữ liệu</v-btn
       >
 
       <v-btn
          class="px-2 px-sm-4"
+         size="small"
          @click="addFormDialog = true"
          >Thêm sách mới</v-btn
       >
 
-      <v-btn class="px-2 px-sm-4">Xoá tất cả</v-btn>
       <v-spacer></v-spacer>
+   </v-app-bar>
+
+   <v-app-bar
+      elevation="0"
+      :height="84"
+      style="position: fixed"
+      class="bg-surface-light"
+   >
+      <div class="pa-4 w-100">
+         <search-bar
+            :filters="searchFilters"
+            @submit-search="submitSearch"
+         ></search-bar>
+      </div>
    </v-app-bar>
 
    <div
@@ -42,7 +60,12 @@
       v-if="booksCount > 0"
    ></data-table>
 
-   <p v-else>Không tìm thấy dữ liệu sách.</p>
+   <p
+      class="text-center subheading py-4"
+      v-else
+   >
+      Không tìm thấy dữ liệu sách.
+   </p>
 
    <div class="text-center pa-4">
       <v-dialog
@@ -189,18 +212,17 @@
             <p>Xác nhận muốn xoá sách này?</p>
          </v-card-text>
 
-         <v-card-actions class="px-6">
+         <v-card-actions class="pa-4">
             <v-spacer></v-spacer>
 
             <v-btn
-               color="primary"
                text="Huỷ bỏ"
                variant="tonal"
                @click="confirmDeleteBookDialog = false"
             ></v-btn>
 
             <v-btn
-               color="primary"
+               color="danger"
                text="Đồng ý"
                variant="flat"
                @click="deleteBook(bookActive)"
@@ -233,21 +255,27 @@
 
 <script>
    import BookService from '~/services/BookService';
-   import UserService from '~/services/UserService';
    import DataTable from '~/components/admin/DataTable.vue';
    import BookForm from '~/components/admin/BookForm.vue';
-   import { bookTableHeaders } from '~/utils/convertTableHeader';
-   import { BOOK_TABLE_HEADERS } from '~/utils/constants';
-   import { BOOK_SORT_BY, SORT_TYPE } from '~/utils/constants';
+   import {
+      BOOK_SORT_BY,
+      SORT_TYPE,
+      BOOK_TABLE_HEADERS,
+      BOOK_SEARCH_FILTERS_FOR_ADMIN,
+   } from '~/utils/constants';
    import { convertTimestamp } from '~/utils/algorithms';
    import { checkRequiredLogin } from '~/middlewares/requireReLogin';
    import { useRouter } from 'vue-router';
    import { mdiClose } from '@mdi/js';
+   import EmployeeService from '~/services/EmployeeService';
+   import SearchBar from '~/components/user/SearchBar.vue';
+   import { useSearchFilterForUserStore } from '~/stores';
 
    export default {
       components: {
          DataTable,
          BookForm,
+         SearchBar,
       },
       data() {
          return {
@@ -272,13 +300,15 @@
             icon: {
                mdiClose,
             },
+            searchFilters: BOOK_SEARCH_FILTERS_FOR_ADMIN,
+            searchFilterStore: useSearchFilterForUserStore(),
          };
       },
 
       methods: {
          async logout() {
             try {
-               await UserService.logout();
+               await EmployeeService.logout();
             } catch (error) {
                console.log(error);
             }
@@ -293,6 +323,7 @@
                console.log(error);
             }
          },
+
          convertBookTimestamp() {
             this.books.map((book) => {
                book.createdAt = convertTimestamp(book.createdAt);
@@ -314,12 +345,6 @@
             } catch (error) {
                console.log(error);
             }
-         },
-
-         async convertBookTableHeaders() {
-            this.tableHeaders = this.bookProperties
-               .filter((header) => bookTableHeaders.hasOwnProperty(header))
-               .map((header) => bookTableHeaders[header]);
          },
 
          async addBook(data) {
@@ -399,6 +424,11 @@
          async refreshBook() {
             await this.getBooks();
             await this.convertBookTimestamp();
+            const { setSearchFilter } = this.searchFilterStore;
+            setSearchFilter({
+               searchText: '',
+               filterSelected: BOOK_SEARCH_FILTERS_FOR_ADMIN[0],
+            });
          },
 
          confirmDeleteBook(book) {
@@ -421,6 +451,20 @@
                this.snackbarColor = false;
                this.snackbar = true;
             }
+         },
+
+         async submitSearch() {
+            const { searchFilter } = this.searchFilterStore;
+
+            const result = (await BookService.getBooksByFilter(searchFilter))
+               .result;
+
+            this.books = result;
+            this.books.map((book) => {
+               book.publisher = book.publisher.publisherName;
+            });
+            this.booksCount = result?.length;
+            this.convertBookTimestamp();
          },
       },
 

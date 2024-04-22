@@ -205,6 +205,9 @@
             rounded="lg"
          >
             <v-card-item class="pa-4">
+               <template v-slot:prepend>
+                  <p class="subheading text-uppercase">Thông báo</p>
+               </template>
                <template v-slot:append>
                   <v-icon
                      :icon="mdiClose"
@@ -212,15 +215,17 @@
                   ></v-icon>
                </template>
             </v-card-item>
+            <v-divider></v-divider>
             <v-card-text class="flex-center flex-column px-8">
                <v-btn
                   style="font-size: 3rem"
                   :icon="signUpSucess ? mdiCheck : mdiClose"
                   :color="signUpSucess ? 'success' : 'error'"
                   size="90"
+                  flat
                ></v-btn>
 
-               <p class="mt-8 text-center">
+               <p class="subheading mt-5 text-center">
                   {{ signUpNotification }}
                </p>
             </v-card-text>
@@ -240,7 +245,7 @@
                   v-if="signUpSucess"
                   class="mt-4"
                   color="primary"
-                  variant="outlined"
+                  variant="tonal"
                   block
                   :to="{
                      name: 'userHomePage',

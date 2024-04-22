@@ -26,6 +26,22 @@ export const useSearchFilterForUserStore = defineStore(
    }
 );
 
+export const useSearchFilterForAdminStore = defineStore(
+   'search-filter-for-admin',
+   () => {
+      const searchFilter = ref({});
+      function setSearchFilter(filter) {
+         searchFilter.value = filter;
+      }
+      return { searchFilter, setSearchFilter };
+   },
+   {
+      persist: {
+         storage: sessionStorage,
+      },
+   }
+);
+
 export const useLoginStore = defineStore(
    'login',
    () => {

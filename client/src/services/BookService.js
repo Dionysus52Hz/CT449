@@ -1,6 +1,7 @@
 import createApiClient from './ApiService';
 import { setAccessToken, getAccessToken } from '~/utils/accessToken';
-import UserService from './UserService';
+import EmployeeService from './EmployeeService';
+import TokenService from './TokenService';
 
 class BookService {
    constructor(baseURL = '/v1/books') {
@@ -41,7 +42,7 @@ class BookService {
                errorResponse.data.message === 'Invalid access token!' &&
                errorResponse.status === 401
             ) {
-               const newAccessToken = (await UserService.getNewAccessToken())
+               const newAccessToken = (await TokenService.getNewAccessToken())
                   .accessToken;
                await setAccessToken(newAccessToken);
 

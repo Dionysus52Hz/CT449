@@ -34,7 +34,9 @@ const getUsers = async () => {
 
 const getUser = async (id) => {
    try {
-      const user = await UserModel.findById(id).populate('borrowedBook');
+      const user = await UserModel.findById(id)
+         .populate('borrowedBook')
+         .populate('favoriteBook');
       return user;
    } catch (error) {
       throw new Error(error);
@@ -98,24 +100,25 @@ const login = async (userId, pass) => {
    }
 };
 
-const createNewAccessToken = async (refreshToken) => {
-   try {
-      const verified = jwt.verify(refreshToken, env.JWT_SECRET_KEY);
+// const createNewAccessToken = async (refreshToken) => {
+//    try {
+//       const verified = jwt.verify(refreshToken, env.JWT_SECRET_KEY);
+//       console.log(verified);
 
-      const result = await UserModel.findOne({
-         _id: verified._id,
-         refreshToken: refreshToken,
-      });
+//       const result = await UserModel.findOne({
+//          _id: verified._id,
+//          refreshToken: refreshToken,
+//       });
 
-      const newAccessToken = result
-         ? jwtMiddleware.generateAccessToken(result._id, result.role)
-         : 'Invalid refresh token';
+//       const newAccessToken = result
+//          ? jwtMiddleware.generateAccessToken(result._id, result.role)
+//          : null;
 
-      return newAccessToken;
-   } catch (error) {
-      throw new Error(error);
-   }
-};
+//       return newAccessToken;
+//    } catch (error) {
+//       throw new Error(error);
+//    }
+// };
 
 const logout = async (refreshToken) => {
    try {
@@ -131,6 +134,52 @@ const logout = async (refreshToken) => {
    }
 };
 
+const uploadUserAvatar = async (id, image) => {
+   try {
+      const result = await UserModel.findByIdAndUpdate(
+         id,
+         {
+            avatar: image.path,
+         },
+         {
+            returnDocument: 'after',
+         }
+      );
+      return result;
+   } catch (error) {
+      throw new Error(error);
+   }
+};
+
+const getUsersByFilter = async (filter) => {
+   try {
+      const searchText = filter.searchText;
+      const searchKey = filter.filterSelected.filter;
+      let query;
+      if (searchKey === 'keyword') {
+         query = {
+            $or: [
+               { userId: { $regex: new RegExp(searchText, 'i') } },
+               { email: { $regex: new RegExp(searchText, 'i') } },
+               { firstName: { $regex: new RegExp(searchText, 'i') } },
+               { lastName: { $regex: new RegExp(searchText, 'i') } },
+               { phone: { $regex: new RegExp(searchText, 'i') } },
+            ],
+         };
+      } else {
+         query = {
+            [searchKey]: {
+               $regex: new RegExp(searchText, 'i'),
+            },
+         };
+      }
+      const result = await UserModel.find(query);
+      return result;
+   } catch (error) {
+      throw new Error(error);
+   }
+};
+
 export const UserService = {
    createNew,
    getUsers,
@@ -139,5 +188,6 @@ export const UserService = {
    deleteUser,
    login,
    logout,
-   createNewAccessToken,
+   uploadUserAvatar,
+   getUsersByFilter,
 };

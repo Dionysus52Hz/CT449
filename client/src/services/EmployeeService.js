@@ -1,5 +1,6 @@
 import axiosInstance from './ApiService';
 import { getAccessToken, setAccessToken } from '~/utils/accessToken';
+import TokenService from './TokenService';
 
 class EmployeeService {
    constructor(baseURL = '/v1/employees') {
@@ -40,7 +41,7 @@ class EmployeeService {
                errorResponse.data.message === 'Invalid access token!' &&
                errorResponse.status === 401
             ) {
-               const newAccessToken = (await this.getNewAccessToken())
+               const newAccessToken = (await TokenService.getNewAccessToken())
                   .accessToken;
                await setAccessToken(newAccessToken);
 
@@ -77,10 +78,6 @@ class EmployeeService {
 
    async login(data) {
       return (await this.API.post('/login', data)).data;
-   }
-
-   async getNewAccessToken() {
-      return (await this.API.post('/create-new-access-token')).data;
    }
 
    async logout() {

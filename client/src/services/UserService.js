@@ -1,5 +1,6 @@
 import axiosInstance from './ApiService';
 import { getAccessToken, setAccessToken } from '~/utils/accessToken';
+import TokenService from './TokenService';
 
 class UserService {
    constructor(baseURL = '/v1/users') {
@@ -40,7 +41,7 @@ class UserService {
                errorResponse.data.message === 'Invalid access token!' &&
                errorResponse.status === 401
             ) {
-               const newAccessToken = (await this.getNewAccessToken())
+               const newAccessToken = (await TokenService.getNewAccessToken())
                   .accessToken;
                await setAccessToken(newAccessToken);
 
@@ -79,16 +80,31 @@ class UserService {
       return (await this.API.post('/login', data)).data;
    }
 
-   async getNewAccessToken() {
-      return (await this.API.post('/create-new-access-token')).data;
-   }
-
    async logout() {
       return (await this.API.post('/logout')).data;
    }
 
    async getCurrent() {
       return (await this.API.get('/current')).data;
+   }
+
+   async uploadUserAvatar(id, file) {
+      console.log(id, file);
+      return await this.API.put(`/upload-user-avatar/${id}`, file, {
+         headers: {
+            'Content-Type': 'multipart/form-data',
+         },
+      });
+   }
+
+   async getUsersByFilter(filter) {
+      return (
+         await this.API.get('/get-users-by-filter', {
+            params: {
+               filter,
+            },
+         })
+      ).data;
    }
 }
 
