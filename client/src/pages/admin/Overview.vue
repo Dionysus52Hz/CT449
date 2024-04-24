@@ -1,9 +1,204 @@
 <template>
    <v-container fluid>
+      <v-row class="ma-n2">
+         <v-col
+            cols="6"
+            sm="3"
+         >
+            <v-card
+               class="mx-auto"
+               max-width="368"
+               color="surface-light"
+               rounded="lg"
+               elevation="0"
+            >
+               <v-card-item title="Tổng số sách">
+                  <!-- <template v-slot:subtitle>
+                     <v-icon
+                        class="me-1 pb-1"
+                        color="error"
+                        icon="mdi-alert"
+                        size="18"
+                     ></v-icon>
+
+                     Extreme Weather Alert
+                  </template> -->
+               </v-card-item>
+
+               <v-card-text class="py-0">
+                  <v-row
+                     align="center"
+                     no-gutters
+                  >
+                     <v-col
+                        style="font-size: 3rem"
+                        class="font-weight-bold"
+                        cols="6"
+                     >
+                        {{ books.length }}
+                     </v-col>
+
+                     <v-col
+                        class="text-right"
+                        cols="6"
+                     >
+                        <v-icon
+                           color="#A9DAD9"
+                           :icon="mdiBook"
+                           size="60"
+                        ></v-icon>
+                     </v-col>
+                  </v-row>
+               </v-card-text>
+
+               <div class="d-flex py-3 justify-space-between"></div>
+            </v-card>
+         </v-col>
+
+         <v-col
+            cols="6"
+            sm="3"
+         >
+            <v-card
+               class="mx-auto"
+               max-width="368"
+               color="surface-light"
+               rounded="lg"
+               elevation="0"
+            >
+               <v-card-item title="Tổng số độc giả">
+                  <!-- <template v-slot:subtitle>
+                     <v-icon
+                        class="me-1 pb-1"
+                        color="error"
+                        icon="mdi-alert"
+                        size="18"
+                     ></v-icon>
+
+                     Extreme Weather Alert
+                  </template> -->
+               </v-card-item>
+
+               <v-card-text class="py-0">
+                  <v-row
+                     align="center"
+                     no-gutters
+                  >
+                     <v-col
+                        style="font-size: 3rem"
+                        class="font-weight-bold"
+                        cols="6"
+                     >
+                        {{ users.length }}
+                     </v-col>
+
+                     <v-col
+                        class="text-right"
+                        cols="6"
+                     >
+                        <v-icon
+                           color="#F99993"
+                           :icon="mdiAccount"
+                           size="60"
+                        ></v-icon>
+                     </v-col>
+                  </v-row>
+               </v-card-text>
+
+               <div class="d-flex py-3 justify-space-between"></div>
+            </v-card>
+         </v-col>
+
+         <v-col
+            cols="6"
+            sm="3"
+         >
+            <v-card
+               class="mx-auto"
+               max-width="368"
+               color="surface-light"
+               rounded="lg"
+               elevation="0"
+            >
+               <v-card-item title="Tổng số nhân viên"> </v-card-item>
+
+               <v-card-text class="py-0">
+                  <v-row
+                     align="center"
+                     no-gutters
+                  >
+                     <v-col
+                        style="font-size: 3rem"
+                        class="font-weight-bold"
+                        cols="6"
+                     >
+                        {{ employees.length }}
+                     </v-col>
+
+                     <v-col
+                        class="text-right"
+                        cols="6"
+                     >
+                        <v-icon
+                           color="#F7D754"
+                           :icon="mdiAccountTie"
+                           size="60"
+                        ></v-icon>
+                     </v-col>
+                  </v-row>
+               </v-card-text>
+
+               <div class="d-flex py-3 justify-space-between"></div>
+            </v-card>
+         </v-col>
+
+         <v-col
+            cols="6"
+            sm="3"
+         >
+            <v-card
+               class="mx-auto"
+               max-width="368"
+               color="surface-light"
+               rounded="lg"
+               elevation="0"
+            >
+               <v-card-item title="Tổng số sách đã mượn"> </v-card-item>
+
+               <v-card-text class="py-0">
+                  <v-row
+                     align="center"
+                     no-gutters
+                  >
+                     <v-col
+                        style="font-size: 3rem"
+                        class="font-weight-bold"
+                        cols="6"
+                     >
+                        {{ borrowings.length }}
+                     </v-col>
+
+                     <v-col
+                        class="text-right"
+                        cols="6"
+                     >
+                        <v-icon
+                           color="#71D79D"
+                           :icon="mdiBookClock"
+                           size="60"
+                        ></v-icon>
+                     </v-col>
+                  </v-row>
+               </v-card-text>
+
+               <div class="d-flex py-3 justify-space-between"></div>
+            </v-card>
+         </v-col>
+      </v-row>
+
       <v-row>
          <v-col
             cols="12"
-            lg="6"
             class="pa-1 pa-sm-4"
          >
             <v-sheet
@@ -12,13 +207,13 @@
                color="surface-light"
                class="px-2 px-sm-4 pb-2 pb-sm-4"
             >
-               <div class="d-flex align-center pa-2 pa-sm-4">
-                  <!-- <v-icon
+               <div class="d-flex align-center pa-2 ps-sm-0 pa-sm-4">
+                  <v-icon
                      :icon="mdiClockOutline"
                      class="heading me-2"
-                  ></v-icon> -->
+                  ></v-icon>
                   <p class="font-weight-bold heading">
-                     Yêu cầu đăng kí mượn sách
+                     Đăng kí mượn sách gần đây
                   </p>
                </div>
 
@@ -30,7 +225,7 @@
                      Không có yêu cầu mượn sách nào
                   </p>
                   <v-card
-                     v-for="(item, i) in borrowings"
+                     v-for="(item, i) in borrowings.slice(0, 5)"
                      class="px-2 px-sm-4 mb-md-3"
                      :key="i"
                      rounded="lg"
@@ -210,17 +405,6 @@
                </div>
             </v-sheet>
          </v-col>
-
-         <v-col
-            cols="12"
-            lg="6"
-         >
-            <v-card>
-               <v-card-item :prepend-icon="mdiClockOutline">
-                  <v-card-title>Quá hạn trả tài liệu</v-card-title>
-               </v-card-item>
-            </v-card>
-         </v-col>
       </v-row>
    </v-container>
 
@@ -252,16 +436,23 @@
 </template>
 
 <script setup>
-   import BorrowingService from '~/services/BorrowingService';
    import { onActivated, onBeforeMount, ref, watch } from 'vue';
    import {
       mdiClockOutline,
       mdiBookClockOutline,
       mdiCheck,
       mdiClose,
+      mdiBook,
+      mdiAccount,
+      mdiAccountTie,
+      mdiBookClock,
    } from '@mdi/js';
    import { useDisplay } from 'vuetify/lib/framework.mjs';
    import { convertTimestamp } from '~/utils/algorithms';
+   import BookService from '~/services/BookService';
+   import UserService from '~/services/UserService';
+   import EmployeeService from '~/services/EmployeeService';
+   import BorrowingService from '~/services/BorrowingService';
 
    const requireLoginDialog = ref(false);
    const checkRequiredLogin = (error) => {
@@ -297,7 +488,17 @@
       }
    };
 
-   const borrowings = ref(null);
+   const books = ref([]);
+   const getBooks = async () => {
+      try {
+         books.value = (await BookService.getBooks()).books;
+      } catch (error) {
+         console.log(error);
+         checkRequiredLogin(error);
+      }
+   };
+
+   const borrowings = ref([]);
    const getBorrowings = async () => {
       try {
          borrowings.value = (await BorrowingService.getBorrowings()).borrowings;
@@ -308,12 +509,39 @@
       }
    };
 
+   const users = ref([]);
+   const getUsers = async () => {
+      try {
+         users.value = (await UserService.getUsers()).users;
+         console.log(users.value);
+      } catch (error) {
+         console.log(error);
+         checkRequiredLogin(error);
+      }
+   };
+
+   const employees = ref([]);
+   const getEmployees = async () => {
+      try {
+         employees.value = (await EmployeeService.getEmployees()).employees;
+         console.log(employees.value);
+      } catch (error) {
+         console.log(error);
+         checkRequiredLogin(error);
+      }
+   };
+
    onBeforeMount(async () => {
+      await getBooks();
+      await getUsers();
+      await getEmployees();
       await getBorrowings();
    });
 
    onActivated(async () => {
-      console.log(123);
+      await getBooks();
+      await getUsers();
+      await getEmployees();
       await getBorrowings();
    });
 </script>

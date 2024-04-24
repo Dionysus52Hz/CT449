@@ -47,7 +47,7 @@ export const useLoginStore = defineStore(
    () => {
       const loginState = ref({
          isLoggedIn: false,
-         userData: null,
+         owner: null,
          role: null,
       });
 
@@ -55,6 +55,23 @@ export const useLoginStore = defineStore(
          loginState.value = state;
       }
       return { loginState, setLoginState };
+   },
+   {
+      persist: {
+         storage: localStorage,
+      },
+   }
+);
+
+export const useCurrentUserStore = defineStore(
+   'current-user',
+   () => {
+      const currentUser = ref(null);
+
+      function setCurrentUser(user) {
+         currentUser.value = user;
+      }
+      return { currentUser, setCurrentUser };
    },
    {
       persist: {

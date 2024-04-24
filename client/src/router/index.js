@@ -10,6 +10,7 @@ import SignUp from '~/pages/user/SignUp.vue';
 import Login from '~/pages/user/Login.vue';
 import Result from '~/pages/user/Result.vue';
 import BookDetails from '~/pages/user/BookDetails.vue';
+import UserInfo from '~/pages/user/UserInfo.vue';
 
 // Admin Pages
 import AdminHome from '~/pages/admin/AdminHome.vue';
@@ -17,6 +18,7 @@ import AdminBookManagement from '~/pages/admin/BookManagement.vue';
 import AdminUserManagement from '~/pages/admin/UserManagement.vue';
 import AdminBorrowingManagement from '~/pages/admin/BorrowingManagement.vue';
 import AdminOverview from '~/pages/admin/Overview.vue';
+import AdminEmployeeManagement from '~/pages/admin/EmployeeManagement.vue';
 
 const routes = [
    {
@@ -61,6 +63,11 @@ const routes = [
             props: true,
             beforeEnter: () => {},
          },
+         {
+            path: 'user-info',
+            name: 'userInfoPage',
+            component: UserInfo,
+         },
       ],
    },
 
@@ -87,6 +94,11 @@ const routes = [
             path: 'borrowing-management',
             name: 'adminBorrowingManagementPage',
             component: AdminBorrowingManagement,
+         },
+         {
+            path: 'employees-management',
+            name: 'adminEmployeeManagementPage',
+            component: AdminEmployeeManagement,
          },
       ],
    },

@@ -94,26 +94,10 @@
          </v-col>
       </v-row>
 
-      <v-row justify="center">
-         <v-col cols="8">
-            <div class="text-center">
-               <v-pagination
-                  v-model="currentPage"
-                  density="comfortable"
-                  active-color="primary"
-                  :length="totalPages"
-                  :total-visible="5"
-                  :next-icon="this.icons.mdiMenuRight"
-                  :prev-icon="this.icons.mdiMenuLeft"
-               ></v-pagination>
-            </div>
-         </v-col>
-      </v-row>
-
       <v-row class="pa-2">
          <v-col
             cols="12"
-            style="overflow: scroll; max-height: 720px; border: 1px solid #ccc"
+            style="overflow: scroll; max-height: 540px; border: 1px solid #ccc"
          >
             <table>
                <tr>
@@ -169,7 +153,10 @@
       </v-row>
 
       <v-row justify="center">
-         <v-col cols="8">
+         <v-col
+            class="pa-2"
+            cols="8"
+         >
             <div class="text-center">
                <v-pagination
                   v-model="currentPage"

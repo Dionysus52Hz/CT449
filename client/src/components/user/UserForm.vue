@@ -3,12 +3,6 @@
    import * as yup from 'yup';
    import { USER_GENDER } from '~/utils/constants';
 
-   const props = defineProps({
-      user: Object,
-   });
-
-   const emit = defineEmits(['submitUser', 'cancel']);
-
    const schema = yup.object().shape({
       userId: yup.string().required('Tên đăng nhập không thể để trống.'),
       email: yup
@@ -96,8 +90,6 @@
          v-model="userId"
          v-bind="userIdProps"
          label="Tên đăng nhập"
-         variant="outlined"
-         bg-color="surface-light"
       />
 
       <v-text-field
@@ -106,8 +98,6 @@
          v-bind="emailProps"
          label="Email"
          type="text"
-         variant="outlined"
-         bg-color="surface-light"
       />
 
       <v-text-field
@@ -116,8 +106,6 @@
          v-bind="lastNameProps"
          label="Họ và tên đệm"
          type="text"
-         variant="outlined"
-         bg-color="surface-light"
       />
 
       <v-text-field
@@ -126,8 +114,6 @@
          v-bind="firstNameProps"
          label="Tên"
          type="text"
-         variant="outlined"
-         bg-color="surface-light"
       />
 
       <p class="title">Ảnh đại diện</p>
@@ -156,8 +142,6 @@
          v-bind="birthdayProps"
          label="Ngày sinh"
          type="date"
-         variant="outlined"
-         bg-color="surface-light"
       >
       </v-text-field>
 
@@ -170,8 +154,6 @@
          label="Giới tính"
          return-object
          density="default"
-         variant="outlined"
-         bg-color="surface-light"
       ></v-select>
 
       <v-text-field
@@ -180,8 +162,6 @@
          v-bind="addressProps"
          label="Địa chỉ"
          type="text"
-         variant="outlined"
-         bg-color="surface-light"
       />
 
       <v-text-field
@@ -190,8 +170,6 @@
          v-bind="phoneProps"
          label="Số điện thoại"
          type="text"
-         variant="outlined"
-         bg-color="surface-light"
       />
    </v-form>
 </template>

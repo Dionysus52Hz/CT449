@@ -45,8 +45,7 @@ const getUser = async (id) => {
 
 const updateUser = async (id, data) => {
    try {
-      const hashPassword = await bcrypt.hash(data.password, 10);
-      data.password = hashPassword;
+      console.log(data);
       const result = await UserModel.findByIdAndUpdate(id, data, {
          returnDocument: 'after',
          runValidators: true,
@@ -99,26 +98,6 @@ const login = async (userId, pass) => {
       throw new Error(error);
    }
 };
-
-// const createNewAccessToken = async (refreshToken) => {
-//    try {
-//       const verified = jwt.verify(refreshToken, env.JWT_SECRET_KEY);
-//       console.log(verified);
-
-//       const result = await UserModel.findOne({
-//          _id: verified._id,
-//          refreshToken: refreshToken,
-//       });
-
-//       const newAccessToken = result
-//          ? jwtMiddleware.generateAccessToken(result._id, result.role)
-//          : null;
-
-//       return newAccessToken;
-//    } catch (error) {
-//       throw new Error(error);
-//    }
-// };
 
 const logout = async (refreshToken) => {
    try {

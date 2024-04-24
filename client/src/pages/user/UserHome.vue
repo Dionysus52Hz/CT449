@@ -16,7 +16,7 @@
             <v-row no-gutters>
                <v-col cols="12">
                   <h1 class="main-title text-primary pa-2">
-                     Education is the premise of progress
+                     Read books change the world
                   </h1>
                </v-col>
 
@@ -88,39 +88,14 @@
                :section="'Sách mới'"
                :books="newestBooks"
                :documents-per-page="12"
+               @directPage="goToBookCategoriesPage"
             ></book-grid>
-         </v-col>
-
-         <v-col
-            cols="12"
-            class="pa-2 pa-sm-3"
-         >
-            <book-grid
-               :section="'Danh mục phân loại'"
-               :books="[]"
-            >
-               <v-tabs
-                  v-model="topicSelected"
-                  class="topic-select"
-                  show-arrows
-                  mandatory
-                  center-active
-               >
-                  <v-tab
-                     v-for="category in BOOK_TOPICS"
-                     :hide-slider="true"
-                     :ripple="false"
-                     >{{ category }}</v-tab
-                  >
-               </v-tabs>
-            </book-grid>
          </v-col>
       </v-row>
    </v-container>
 </template>
 
 <script setup>
-   import SearchBar from '~/components/user/SearchBar.vue';
    import BookGrid from '~/components/user/BookGrid.vue';
    import { useCurrentPageStore } from '~/stores';
    import { useSearchFilterForUserStore } from '~/stores';
@@ -163,6 +138,12 @@
          params: {
             filter: 'advanced-search',
          },
+      });
+   };
+
+   const goToBookCategoriesPage = () => {
+      router.push({
+         name: 'bookCategoriesPage',
       });
    };
 

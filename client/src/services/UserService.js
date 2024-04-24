@@ -72,6 +72,10 @@ class UserService {
       return (await this.API.put(`/${id}`, data)).data;
    }
 
+   async updateCurrent(data) {
+      return (await this.API.put(`/current`, data)).data;
+   }
+
    async deleteUser(id) {
       return (await this.API.delete(`/${id}`)).data;
    }
@@ -89,7 +93,6 @@ class UserService {
    }
 
    async uploadUserAvatar(id, file) {
-      console.log(id, file);
       return await this.API.put(`/upload-user-avatar/${id}`, file, {
          headers: {
             'Content-Type': 'multipart/form-data',

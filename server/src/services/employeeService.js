@@ -134,6 +134,51 @@ const logout = async (refreshToken) => {
    }
 };
 
+const uploadEmployeeAvatar = async (id, image) => {
+   try {
+      const result = await EmployeeModel.findByIdAndUpdate(
+         id,
+         {
+            avatar: image.path,
+         },
+         {
+            returnDocument: 'after',
+         }
+      );
+      return result;
+   } catch (error) {
+      throw new Error(error);
+   }
+};
+
+const getEmployeesByFilter = async (filter) => {
+   try {
+      const searchText = filter.searchText;
+      const searchKey = filter.filterSelected.filter;
+      let query;
+      if (searchKey === 'keyword') {
+         query = {
+            $or: [
+               { employeeId: { $regex: new RegExp(searchText, 'i') } },
+               { fullName: { $regex: new RegExp(searchText, 'i') } },
+               { address: { $regex: new RegExp(searchText, 'i') } },
+               { phone: { $regex: new RegExp(searchText, 'i') } },
+            ],
+         };
+      } else {
+         query = {
+            [searchKey]: {
+               $regex: new RegExp(searchText, 'i'),
+            },
+         };
+      }
+      const result = await EmployeeModel.find(query);
+      return result;
+   } catch (error) {
+      throw new Error(error);
+   }
+};
+
 export const EmployeeService = {
    createNew,
    getEmployees,
@@ -142,4 +187,6 @@ export const EmployeeService = {
    deleteEmployee,
    login,
    logout,
+   uploadEmployeeAvatar,
+   getEmployeesByFilter,
 };

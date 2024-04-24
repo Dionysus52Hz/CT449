@@ -284,6 +284,7 @@
       timeout="2500"
       close-on-back
       position="fixed"
+      location="bottom right"
       :color="deleteSuccess ? 'success' : 'danger'"
    >
       {{ snackbarContent }}

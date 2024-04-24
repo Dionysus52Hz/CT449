@@ -8,46 +8,13 @@
             <v-card
                rounded="lg"
                color="background"
-               class="search-tab bg-surface-light mb-2"
+               class="pa-4 search-tab bg-surface-light mb-2"
                elevation="0"
             >
-               <v-tabs
-                  v-model="searchTab"
-                  color="primary"
-               >
-                  <v-tab
-                     value="basic-search"
-                     @click="goToBasicSearch"
-                     >Tìm kiếm cơ bản</v-tab
-                  >
-                  <v-tab
-                     value="advanced-search"
-                     @click="goToAdvancedSearch"
-                     >Tìm kiếm nâng cao</v-tab
-                  >
-               </v-tabs>
-
-               <v-window
-                  v-model="searchTab"
-                  class="border-primary border-0 border-dashed border-t-sm"
-               >
-                  <v-window-item value="basic-search">
-                     <v-container
-                        fluid
-                        class="pa-2 pa-sm-4"
-                     >
-                        <search-bar
-                           :filters="SEARCH_FILTERS_FOR_USER"
-                           @submit-search="submitBasicSearch"
-                        ></search-bar>
-                     </v-container>
-                  </v-window-item>
-                  <v-window-item value="advanced-search">
-                     <advanced-search
-                        @submit-search="submitAdvancedSearch"
-                     ></advanced-search>
-                  </v-window-item>
-               </v-window>
+               <search-bar
+                  :filters="SEARCH_FILTERS_FOR_USER"
+                  @submit-search="submitBasicSearch"
+               ></search-bar>
             </v-card>
          </v-col>
 
@@ -92,7 +59,7 @@
    import BookService from '~/services/BookService';
    import SearchBar from '~/components/user/SearchBar.vue';
    import BookList from '~/components/user/BookList.vue';
-   import AdvancedSearch from '~/components/user/AdvancedSearch.vue';
+
    import { SEARCH_FILTERS_FOR_USER } from '~/utils/constants';
    import { useSearchFilterForUserStore, useCurrentPageStore } from '~/stores';
    import { ref, onBeforeMount, onMounted, onActivated } from 'vue';

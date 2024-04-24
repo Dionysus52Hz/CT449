@@ -4,12 +4,61 @@
       rounded="lg"
    >
       <div
-         class="pb-2 pb-sm-4 mb-3 mb-sm-6 border-b-sm"
+         class="d-flex pb-2 pb-sm-4 mb-3 mb-sm-6 border-b-sm"
          v-if="props.section"
       >
          <h1 class="text-uppercase font-weight-black heading">
             {{ props.section }}
          </h1>
+
+         <v-spacer></v-spacer>
+
+         <v-btn
+            variant="text"
+            color="primary"
+            @click="directPage"
+            >Xem tất cả</v-btn
+         >
+      </div>
+
+      <v-row
+         v-if="hasPagination"
+         class="align-center mb-2"
+      >
+         <v-spacer></v-spacer>
+         <p class="text-body">Số lượng hiển thị mỗi trang</p>
+         <v-col
+            cols="6"
+            md="3"
+         >
+            <v-select
+               v-if="hasPagination"
+               v-model="documentsPerPageSelected"
+               :items="documentsPerPage"
+               label="Select"
+               return-object
+               single-line
+               hide-details
+               variant="outlined"
+               color="primary"
+               base-color="primary"
+               density="compact"
+            ></v-select>
+         </v-col>
+      </v-row>
+
+      <div
+         class="text-center mb-4"
+         v-if="hasPagination"
+      >
+         <v-pagination
+            v-model="currentPage"
+            :length="totalPages"
+            :total-visible="5"
+            :next-icon="mdiMenuRight"
+            :prev-icon="mdiMenuLeft"
+            density="comfortable"
+         ></v-pagination>
       </div>
 
       <v-container
@@ -59,28 +108,6 @@
          </v-row>
       </v-container>
    </v-sheet>
-
-   <v-select
-      v-if="hasPagination"
-      v-model="documentsPerPageSelected"
-      :items="documentsPerPage"
-      label="Select"
-      return-object
-      single-line
-   ></v-select>
-
-   <div
-      class="text-center"
-      v-if="hasPagination"
-   >
-      <v-pagination
-         v-model="currentPage"
-         :length="totalPages"
-         :total-visible="5"
-         :next-icon="mdiMenuRight"
-         :prev-icon="mdiMenuLeft"
-      ></v-pagination>
-   </div>
 </template>
 
 <script setup>
@@ -100,7 +127,10 @@
       documentsPerPage: Number,
    });
 
-   const emits = defineEmits(['bookActive']);
+   const emits = defineEmits(['bookActive', 'directPage']);
+   const directPage = () => {
+      emits('directPage');
+   };
 
    const router = useRouter();
    const route = useRoute();

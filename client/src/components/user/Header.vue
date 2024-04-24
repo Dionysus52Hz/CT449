@@ -163,6 +163,7 @@
                v-if="loginState.isLoggedIn && currentUser"
                density="compact"
                class="pa-4"
+               mandatory
             >
                <v-list-item-title class="text-uppercase title"
                   >Tài khoản của tôi</v-list-item-title
@@ -190,6 +191,9 @@
                   color="primary"
                   class="subtitle px-3"
                   rounded="lg"
+                  :value="currentPage"
+                  :active="currentPage === 'library' ? true : false"
+                  @click="goToMyLibraryPage"
                >
                   <template v-slot:prepend>
                      <v-icon
@@ -201,7 +205,6 @@
                   <v-list-item-title
                      class="subtitle"
                      v-text="'Lịch sử mượn sách'"
-                     @click="goToMyLibraryPage"
                   ></v-list-item-title>
                </v-list-item>
 
@@ -210,6 +213,8 @@
                   color="primary"
                   class="subtitle px-3"
                   rounded="lg"
+                  @click="goToUserInfoPage"
+                  :active="currentPage === 'user-info' ? true : false"
                >
                   <template v-slot:prepend>
                      <v-icon
@@ -229,6 +234,7 @@
                   color="primary"
                   class="subtitle px-3"
                   rounded="lg"
+                  :active="currentPage === 'change-password' ? true : false"
                >
                   <template v-slot:prepend>
                      <v-icon
@@ -331,6 +337,8 @@
                   color="primary"
                   class="subtitle px-3"
                   rounded="lg"
+                  :active="currentPage === 'library' ? true : false"
+                  @click="goToMyLibraryPage"
                >
                   <template v-slot:prepend>
                      <v-icon
@@ -342,7 +350,6 @@
                   <v-list-item-title
                      class="subtitle"
                      v-text="'Lịch sử mượn sách'"
-                     @click="goToMyLibraryPage"
                   ></v-list-item-title>
                </v-list-item>
 
@@ -351,6 +358,8 @@
                   color="primary"
                   class="subtitle px-3"
                   rounded="lg"
+                  :active="currentPage === 'user-info' ? true : false"
+                  @click="goToUserInfoPage"
                >
                   <template v-slot:prepend>
                      <v-icon
@@ -370,6 +379,7 @@
                   color="primary"
                   class="subtitle px-3"
                   rounded="lg"
+                  :active="currentPage === 'change-password' ? true : false"
                >
                   <template v-slot:prepend>
                      <v-icon
@@ -569,14 +579,14 @@
          },
       },
 
-      {
-         text: 'Tác giả',
-         value: 'authors',
-         icon: mdiBookshelf,
-         direct: () => {
-            router.push({ name: 'myLibraryPage' });
-         },
-      },
+      // {
+      //    text: 'Tác giả',
+      //    value: 'authors',
+      //    icon: mdiBookshelf,
+      //    direct: () => {
+      //       // router.push({ name: 'myLibraryPage' });
+      //    },
+      // },
    ];
    const goToHomePage = () => {
       router.push({ name: 'userHomePage' });
@@ -592,6 +602,12 @@
 
    const goToMyLibraryPage = () => {
       router.push({ name: 'myLibraryPage' });
+   };
+
+   const goToUserInfoPage = () => {
+      router.push({
+         name: 'userInfoPage',
+      });
    };
    const showSearchBar = ref(false);
    const searchFilterStore = useSearchFilterForUserStore();
@@ -628,7 +644,6 @@
       try {
          if (loginState.value.isLoggedIn) {
             currentUser.value = (await UserService.getCurrent()).userData;
-            console.log(currentUser);
          }
       } catch (error) {
          console.log(error);

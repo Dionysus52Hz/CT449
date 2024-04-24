@@ -1,6 +1,7 @@
 import express from 'express';
 import { EmployeeController } from '~/controllers/employeeController';
 import { verify } from '~/middlewares/verify';
+import uploadCloud from '~/config/cloudinary.config';
 
 const Router = express.Router();
 
@@ -11,9 +12,15 @@ Router.route('/current').get(
    EmployeeController.getCurrent
 );
 
-// Router.route('/create-new-access-token').post(
-//    EmployeeController.createNewAccessToken
-// );
+Router.route('/get-employees-by-filter').get(
+   EmployeeController.getEmployeesByFilter
+);
+
+Router.route('/upload-employee-avatar/:id').put(
+   verify.verifyAccessToken,
+   uploadCloud.single('avatar'),
+   EmployeeController.uploadEmployeeAvatar
+);
 
 Router.route('/logout').post(
    verify.verifyAccessToken,

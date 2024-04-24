@@ -69,6 +69,33 @@ export const USER_SEARCH_FILTERS_FOR_ADMIN = [
       filter: 'firstName',
    },
    {
+      text: 'Địa chỉ',
+      filter: 'address',
+   },
+   {
+      text: 'Số điện thoại',
+      filter: 'phone',
+   },
+];
+
+export const EMPLOYEE_SEARCH_FILTERS_FOR_ADMIN = [
+   {
+      filter: 'keyword',
+      text: 'Từ khoá bất kỳ',
+   },
+   {
+      text: 'Tên đăng nhập',
+      filter: 'employeeId',
+   },
+   {
+      text: 'Tên',
+      filter: 'fullName',
+   },
+   {
+      text: 'Địa chỉ',
+      filter: 'address',
+   },
+   {
       text: 'Số điện thoại',
       filter: 'phone',
    },
@@ -193,6 +220,23 @@ export const USER_TABLE_HEADERS = {
    updatedAt: 'Cập nhật lúc',
 };
 
+export const EMPLOYEE_TABLE_HEADERS = {
+   avatar: 'Ảnh đại diện',
+   employeeId: 'Tên đăng nhập',
+   fullName: 'Họ và tên',
+   position: 'Chức vụ',
+   role: 'Quyền',
+   address: 'Địa chỉ',
+   phone: 'Số điện thoại',
+   createdAt: 'Tạo lúc',
+   updatedAt: 'Cập nhật lúc',
+};
+
+export const EMPLOYEE_ROLE = [
+   { text: 'Quản lý', value: 'admin' },
+   { text: 'Nhân viên', value: 'employee' },
+];
+
 export const USER_GENDER = [
    { text: 'Nam', value: 'male' },
    { text: 'Nữ', value: 'female' },
@@ -218,6 +262,25 @@ export const USER_SORT_BY = [
    {
       text: 'Ngày sinh',
       value: 'birthday',
+   },
+   {
+      text: 'Số điện thoại',
+      value: 'phone',
+   },
+];
+
+export const EMPLOYEE_SORT_BY = [
+   {
+      text: 'Tên đăng nhập',
+      value: 'employeeId',
+   },
+   {
+      text: 'Tên',
+      value: 'fullName',
+   },
+   {
+      text: 'Địa chỉ',
+      value: 'address',
    },
    {
       text: 'Số điện thoại',

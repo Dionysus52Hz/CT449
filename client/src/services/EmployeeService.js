@@ -87,6 +87,24 @@ class EmployeeService {
    async getCurrent() {
       return (await this.API.get('/current')).data;
    }
+
+   async uploadEmployeeAvatar(id, file) {
+      return await this.API.put(`/upload-employee-avatar/${id}`, file, {
+         headers: {
+            'Content-Type': 'multipart/form-data',
+         },
+      });
+   }
+
+   async getEmployeesByFilter(filter) {
+      return (
+         await this.API.get('/get-employees-by-filter', {
+            params: {
+               filter,
+            },
+         })
+      ).data;
+   }
 }
 
 export default new EmployeeService();

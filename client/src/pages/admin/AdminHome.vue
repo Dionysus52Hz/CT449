@@ -17,7 +17,11 @@
          ></v-app-bar-nav-icon>
 
          <v-spacer></v-spacer>
-         <v-btn>
+         <v-btn
+            :to="{
+               name: 'adminOverviewPage',
+            }"
+         >
             <v-icon :icon="mdiHome"></v-icon>
          </v-btn>
       </v-app-bar>
@@ -61,13 +65,6 @@
                :title="currentEmployee?.fullName"
                :subtitle="currentEmployee?.position"
             >
-               <template v-slot:append>
-                  <v-btn
-                     :icon="mdiMenuDown"
-                     size="small"
-                     variant="text"
-                  ></v-btn>
-               </template>
             </v-list-item>
          </v-list>
 
@@ -208,7 +205,7 @@
          text: 'Quản lí nhân viên',
          icon: mdiAccount,
          direct: () => {
-            router.push({ name: 'adminUserManagementPage' });
+            router.push({ name: 'adminEmployeeManagementPage' });
          },
       },
    ];

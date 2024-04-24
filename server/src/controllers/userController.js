@@ -52,6 +52,20 @@ const updateUser = async (req, res, next) => {
    }
 };
 
+const updateCurrent = async (req, res, next) => {
+   try {
+      const { _id } = req.user;
+
+      const result = await UserService.updateUser(_id, req.body);
+      res.status(StatusCodes.OK).json({
+         success: true,
+         result,
+      });
+   } catch (error) {
+      return next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
+   }
+};
+
 const deleteUser = async (req, res, next) => {
    try {
       const result = await UserService.deleteUser(req.params.id);
@@ -216,6 +230,7 @@ export const UserController = {
    getUser,
    updateUser,
    deleteUser,
+   updateCurrent,
    login,
    logout,
    getCurrent,

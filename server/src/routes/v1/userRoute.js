@@ -7,10 +7,9 @@ const Router = express.Router();
 
 Router.route('/login').post(UserController.login);
 
-Router.route('/current').get(
-   verify.verifyAccessToken,
-   UserController.getCurrent
-);
+Router.route('/current')
+   .get(verify.verifyAccessToken, UserController.getCurrent)
+   .put(verify.verifyAccessToken, UserController.updateCurrent);
 
 Router.route('/get-users-by-filter').get(UserController.getUsersByFilter);
 

@@ -27,7 +27,10 @@
       style="position: fixed"
       class="bg-surface-light"
    >
-      <div class="pa-4 w-100">
+      <div
+         class="pa-4 w-100"
+         style="max-width: 1440px; margin: auto"
+      >
          <search-bar
             :filters="searchFilters"
             @submit-search="submitSearch"

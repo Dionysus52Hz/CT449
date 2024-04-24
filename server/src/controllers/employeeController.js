@@ -120,31 +120,6 @@ const getCurrent = async (req, res, next) => {
    }
 };
 
-// const createNewAccessToken = async (req, res, next) => {
-//    try {
-//       const cookie = req.cookies;
-//       const refreshToken = cookie.refreshToken;
-//       if (!cookie || !refreshToken) {
-//          res.status(StatusCodes.UNAUTHORIZED).json({
-//             success: false,
-//             message: 'No refresh token in cookies',
-//          });
-//       }
-//       let newAccessToken;
-//       newAccessToken = await EmployeeService.createNewAccessToken(refreshToken);
-
-//       if (!newAccessToken) {
-//          newAccessToken = await UserService.createNewAccessToken(refreshToken);
-//       }
-//       res.status(StatusCodes.OK).json({
-//          success: true,
-//          accessToken: newAccessToken,
-//       });
-//    } catch (error) {
-//       return next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
-//    }
-// };
-
 const logout = async (req, res, next) => {
    try {
       const cookie = req.cookies;
@@ -166,6 +141,51 @@ const logout = async (req, res, next) => {
    }
 };
 
+const uploadEmployeeAvatar = async (req, res, next) => {
+   try {
+      console.log(req.file);
+      if (!req.file) {
+         res.status(StatusCodes.BAD_REQUEST).json({
+            success: false,
+            message: 'Missing images',
+         });
+      } else {
+         console.log(req.file);
+         const result = await EmployeeService.uploadEmployeeAvatar(
+            req.params.id,
+            req.file
+         );
+         res.status(StatusCodes.OK).json({
+            success: true,
+            result,
+         });
+      }
+   } catch (error) {
+      console.log(error);
+      return next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
+   }
+};
+
+const getEmployeesByFilter = async (req, res, next) => {
+   try {
+      const filter = req.query.filter;
+      const result = await EmployeeService.getEmployeesByFilter(filter);
+      if (result) {
+         res.status(StatusCodes.OK).json({
+            success: true,
+            result,
+         });
+      } else
+         res.status(StatusCodes.NOT_FOUND).json({
+            success: false,
+            message: 'Books not found',
+         });
+   } catch (error) {
+      console.log(error);
+      return next(new ApiError(StatusCodes.BAD_REQUEST, error.message));
+   }
+};
+
 export const EmployeeController = {
    createNew,
    getEmployees,
@@ -175,4 +195,6 @@ export const EmployeeController = {
    login,
    logout,
    getCurrent,
+   uploadEmployeeAvatar,
+   getEmployeesByFilter,
 };

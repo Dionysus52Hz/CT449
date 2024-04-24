@@ -81,7 +81,7 @@
          </v-col>
 
          <v-col
-            style="position: relative"
+            style="position: relative; min-height: 50vh"
             cols="12"
             class="pa-0"
          >

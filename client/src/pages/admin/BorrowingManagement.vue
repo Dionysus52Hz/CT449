@@ -3,7 +3,6 @@
       <v-row>
          <v-col
             cols="12"
-            lg="6"
             class="pa-1 pa-sm-4"
          >
             <v-sheet
@@ -211,7 +210,7 @@
             </v-sheet>
          </v-col>
 
-         <v-col
+         <!-- <v-col
             cols="12"
             lg="6"
          >
@@ -220,7 +219,7 @@
                   <v-card-title>Quá hạn trả tài liệu</v-card-title>
                </v-card-item>
             </v-card>
-         </v-col>
+         </v-col> -->
       </v-row>
    </v-container>
 
@@ -303,7 +302,6 @@
    const getBorrowings = async () => {
       try {
          borrowings.value = (await BorrowingService.getBorrowings()).borrowings;
-         console.log(borrowings.value);
       } catch (error) {
          console.log(error);
          checkRequiredLogin(error);
@@ -312,7 +310,6 @@
 
    const approveRequestBorrowing = async (item) => {
       try {
-         console.log(item._id);
          await BorrowingService.updateBorrowing(item._id, {
             userId: item.userId,
             bookId: item.bookId,
@@ -326,7 +323,6 @@
    };
    const denyRequestBorrowing = async (item) => {
       try {
-         console.log(item._id);
          await BorrowingService.deleteBorrowing(item._id);
          borrowings.value = (await BorrowingService.getBorrowings()).borrowings;
       } catch (error) {
@@ -337,7 +333,6 @@
 
    const returnBook = async (item) => {
       try {
-         console.log(item._id);
          await BorrowingService.updateBorrowing(item._id, {
             userId: item.userId,
             bookId: item.bookId,
